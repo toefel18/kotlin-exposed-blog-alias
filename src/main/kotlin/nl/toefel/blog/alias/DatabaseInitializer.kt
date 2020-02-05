@@ -1,7 +1,7 @@
 package nl.toefel.blog.alias
 
-import nl.toefel.blog.alias.db.User
-import nl.toefel.blog.alias.db.Message
+import nl.toefel.blog.alias.db.UserTable
+import nl.toefel.blog.alias.db.MessageTable
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.slf4j.Logger
@@ -19,11 +19,11 @@ object DatabaseInitializer {
         logger.info("Creating/Updating schema")
 
         transaction {
-            SchemaUtils.createMissingTablesAndColumns(User, Message)
+            SchemaUtils.createMissingTablesAndColumns(UserTable, MessageTable)
         }
 
         val users = transaction {
-            User.selectAll().count()
+            UserTable.selectAll().count()
         }
 
         if (users > 0) {
@@ -34,31 +34,31 @@ object DatabaseInitializer {
         logger.info("Inserting test transaction")
 
         transaction {
-            val hector = User.insert {
+            val hector = UserTable.insert {
                 it[name] = "Hector"
-            } get User.id
+            } get UserTable.id
 
-            val charlotte = User.insert {
+            val charlotte = UserTable.insert {
                 it[name] = "Charlotte"
-            } get User.id
+            } get UserTable.id
 
-            val john = User.insert {
+            val john = UserTable.insert {
                 it[name] = "John"
-            } get User.id
+            } get UserTable.id
 
-            val messageFromHectorToCharlotte = Message.insert {
+            val messageFromHectorToCharlotte = MessageTable.insert {
                 it[fromUser] = hector
                 it[toUser] = charlotte
                 it[timestamp] = LocalDateTime.now().minusHours(1).truncatedTo(ChronoUnit.SECONDS)
                 it[content] = "Hello Charlotte, wanna meet for a date with me (hector)?..."
-            } get Message.id
+            } get MessageTable.id
 
-            val messageFromJohnToHector = Message.insert {
+            val messageFromJohnToHector = MessageTable.insert {
                 it[fromUser] = john
                 it[toUser] = hector
                 it[timestamp] = LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS)
                 it[content] = "Hector, stay away from my girlfriend?..."
-            } get Message.id
+            } get MessageTable.id
         }
     }
 }

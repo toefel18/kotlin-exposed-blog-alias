@@ -2,7 +2,7 @@ package nl.toefel.blog.alias.db
 
 import org.jetbrains.exposed.sql.Table
 
-object User: Table("user") {
+object UserTable: Table("user") {
     val id = long("id").autoIncrement()
     val name = varchar("owner_type", 64)
 
