@@ -1,5 +1,7 @@
 # Kotlin exposed alias example
 
+Repository that accompanies blog post [Kotlin Exposed - using table aliases](https://blog.jdriven.com/2020/02/kotlin-exposed-using-table-aliases/)
+
 Example that shows how to join the same table multiple times using Kotlin Exposed.
 
 Run [Main.kt](src/main/kotlin/nl/toefel/blog/alias/Main.kt) for a working server with a REST api at http://localhost:8080/messages
