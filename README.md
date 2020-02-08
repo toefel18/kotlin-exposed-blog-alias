@@ -45,4 +45,24 @@ val allMessages = transaction {
         }
 }
 
+
+// Query joining the UserTable twice using an alias
+val allMessages = transaction {
+    val fromUser = UserTable.alias("fromUser")
+    val toUser = UserTable.alias("toUser")
+
+    MessageTable
+        .join(fromUser, JoinType.INNER, MessageTable.fromUser, fromUser[UserTable.id])
+        .join(toUser, JoinType.INNER, MessageTable.toUser, toUser[UserTable.id])
+        .selectAll()
+        .map { row ->
+            MessageDto(
+                from = row[fromUser[UserTable.name]],
+                to = row[toUser[UserTable.name]],
+                timestamp = row[MessageTable.timestamp],
+                message = row[MessageTable.content]
+            )
+        }
+}
+
 ```
